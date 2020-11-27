@@ -48,7 +48,8 @@ while game_on:
         break
 
     if correct_answer == 50:
+        words.goto(0, 0)
         words.write("GAME OVER\nYou got them all!", font=("System", 20, "bold"), align=ALIGN)
-        clear()
         game_on = False
+        break
 
