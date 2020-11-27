@@ -28,23 +28,31 @@ ALIGN = "center"
 data = pandas.read_csv("50_states.csv")
 raw_state = data["state"].tolist()
 state = [item.lower() for item in raw_state]
-print(state)
+save_state = state
 correct_answer = 0
 game_on = True
 while game_on:
     num_of_states = len(state)
-    user_input = screen.textinput(title=f"{correct_answer}/50", prompt="Name a state:")
+    user_input = screen.textinput(title=f"{correct_answer}/50", prompt="Name a state:").lower()
     print(user_input)
     answer = user_input.capitalize()
+
     if user_input in state:
         row_data = data[data.state == f"{answer}"]
+        print(row_data)
         x_value = int(row_data.x)
         y_value = int(row_data.y)
         words.penup()
         words.goto(x_value, y_value)
         words.write(f"{answer}", font=FONT, align=ALIGN)
         correct_answer += 1
-    if correct_answer == 50:
-        words.write("GAME OVER")
-        game_on = False
+        save_state.remove(user_input)
+    if user_input == "exit":
+        df = pandas.DataFrame(save_state)
+        df.to_csv("states_to_learn.csv")
+        break
+
+    # if correct_answer == 50:
+    #     words.write("GAME OVER\nYou got them all!", font=("System", 20, "bold"), align=ALIGN)
+    #     game_on = False
 
