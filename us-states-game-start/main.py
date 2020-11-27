@@ -26,33 +26,29 @@ FONT = ("System", 10, "normal")
 ALIGN = "center"
 
 data = pandas.read_csv("50_states.csv")
-raw_state = data["state"].tolist()
-state = [item.lower() for item in raw_state]
-save_state = state
+state = data["state"].tolist()
 correct_answer = 0
 game_on = True
 while game_on:
-    num_of_states = len(state)
-    user_input = screen.textinput(title=f"{correct_answer}/50", prompt="Name a state:").lower()
-    print(user_input)
-    answer = user_input.capitalize()
-
+    user_input = screen.textinput(title=f"{correct_answer}/50", prompt="Name a state:")
     if user_input in state:
-        row_data = data[data.state == f"{answer}"]
+        row_data = data[data.state == f"{user_input}"]
         print(row_data)
         x_value = int(row_data.x)
         y_value = int(row_data.y)
         words.penup()
         words.goto(x_value, y_value)
-        words.write(f"{answer}", font=FONT, align=ALIGN)
+        words.write(f"{user_input}", font=FONT, align=ALIGN)
         correct_answer += 1
-        save_state.remove(user_input)
+        state.remove(user_input)
+
     if user_input == "exit":
-        df = pandas.DataFrame(save_state)
+        df = pandas.DataFrame(state)
         df.to_csv("states_to_learn.csv")
         break
 
-    # if correct_answer == 50:
-    #     words.write("GAME OVER\nYou got them all!", font=("System", 20, "bold"), align=ALIGN)
-    #     game_on = False
+    if correct_answer == 50:
+        words.write("GAME OVER\nYou got them all!", font=("System", 20, "bold"), align=ALIGN)
+        clear()
+        game_on = False
 
